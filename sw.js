@@ -46,11 +46,14 @@ self.addEventListener('fetch', function (event) {
   //            network response.
   
   event.respondWith(caches.open(CACHE_NAME).then(async(cache)=>{
-    return await cache.match(event.request).then(async (cachedResponse)=>{
-      return cachedResponse || await fetch(event.request).then((fetchedResponse)=>{
+    const cachedResponse = await cache.match(event.request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }else {
+      return  await fetch(event.request).then((fetchedResponse)=>{
         cache.put(event.request,fetchedResponse.clone());
-      })
-    })
+      });
+    }
   }));
 
 });
