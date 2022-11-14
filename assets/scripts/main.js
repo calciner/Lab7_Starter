@@ -84,7 +84,7 @@ async function getRecipes() {
   /**************************/
 
   let data = localStorage.getItem("recipes");
-  if(data != null){
+  if(data){
     let recipes = JSON.parse(data)
     return recipes;
   }
