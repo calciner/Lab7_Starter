@@ -50,10 +50,11 @@ self.addEventListener('fetch', function (event) {
     if (cachedResponse) {
       return cachedResponse;
     }else {
-      return  await fetch(event.request).then((fetchedResponse)=>{
-        cache.put(event.request,fetchedResponse.clone());
-      });
+      const networkResponse = await fetch(event.request);
+      cache.put(event.request,networkResponse.clone());
+      return networkResponse;
     }
   }));
 
+  
 });
