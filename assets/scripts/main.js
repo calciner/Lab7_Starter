@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', init);
 // Starts the program, all function calls trace back here
 async function init() {
   // initialize ServiceWorker
-  //initializeServiceWorker();
+  initializeServiceWorker();
   // Get the recipes from localStorage
   let recipes;
   try {
@@ -108,13 +108,15 @@ async function getRecipes() {
         .then((data) => {
           recipes.push(data);
         });
+        if(recipes.length===RECIPE_URLS.length){
+          saveRecipesToStorage(recipes);
+          resolve(recipes);
+        }
       }catch (err){
         console.error(err);
         reject(err);
       }
     }
-    saveRecipesToStorage(recipes);
-    resolve(recipes);
   });
 
   //return recipes;
