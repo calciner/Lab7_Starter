@@ -50,7 +50,7 @@ function initializeServiceWorker() {
     console.log("service worker supported.");
     window.addEventListener("load",async ()=>{
       try{
-        const registration = await navigator.serviceWorker.register("/sw.js")
+        const registration = await navigator.serviceWorker.register("./sw.js")
         .then((reg)=>console.log("service workder success registered."));
       }catch(err){
         console.log(`Registration failed with ${err}`);
