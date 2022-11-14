@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', init);
 // Starts the program, all function calls trace back here
 async function init() {
   // initialize ServiceWorker
-  initializeServiceWorker();
+  //initializeServiceWorker();
   // Get the recipes from localStorage
   let recipes;
   try {
