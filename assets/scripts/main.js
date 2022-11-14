@@ -53,7 +53,7 @@ function initializeServiceWorker() {
         const registration = await navigator.serviceWorker.register("/sw.js")
         .then((reg)=>console.log("service workder success registered."));
       }catch(err){
-        console.error(`Registration failed with ${err}`)
+        console.log(`Registration failed with ${err}`);
       }
     })
   }
