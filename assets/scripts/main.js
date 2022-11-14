@@ -103,11 +103,9 @@ async function getRecipes() {
   return new Promise(async (resolve,reject)=>{
     for (let url of RECIPE_URLS){
       try {
-        await fetch(url)
-        .then((response) =>response.json())
-        .then((data) => {
-          recipes.push(data);
-        });
+        const response = await fetch(url);
+        data = await response.json();
+        recipes.push(data);
         if(recipes.length===RECIPE_URLS.length){
           saveRecipesToStorage(recipes);
           resolve(recipes);
