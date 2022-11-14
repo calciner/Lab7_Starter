@@ -51,7 +51,7 @@ function initializeServiceWorker() {
     try{
       window.addEventListener("load",async ()=>{
         await navigator.serviceWorker.register("./sw.js")
-        .then((reg)=>{console.log("service workder success registered.")});
+        .then((reg)=>{console.log("service workder success registered.",reg)});
       });
     }catch(err){
       console.error(`Registration failed with ${err}`);
@@ -86,6 +86,7 @@ async function getRecipes() {
   let data = localStorage.getItem("recipes");
   if(data){
     let recipes = JSON.parse(data)
+    console.log("getRecipes from storage",recipes);
     return recipes;
   }
   
@@ -104,12 +105,13 @@ async function getRecipes() {
     for (let url of RECIPE_URLS){
       try {
         const response = await fetch(url);
-        data = await response.json();
+        const data = await response.json();
         recipes.push(data);
         if(recipes.length===RECIPE_URLS.length){
           saveRecipesToStorage(recipes);
           resolve(recipes);
         }
+        console.log(url,data)
       }catch (err){
         console.error(err);
         reject(err);
