@@ -44,24 +44,20 @@ self.addEventListener('fetch', async function (event) {
   // B8. TODO - If the request is in the cache, return with the cached version.
   //            Otherwise fetch the resource, add it to the cache, and return
   //            network response.
-  if(event.request.destination === 'image'){
-    await event.respondWith(caches.open(CACHE_NAME).then(async(cache)=>{
+  await event.respondWith(caches.open(CACHE_NAME).then(async(cache)=>{
+    console.log("event request",event.request);
+    const cachedResponse = await cache.match(event.request);
+    if (cachedResponse) {
+      console.log("cachedResponse",cachedResponse)
+      return cachedResponse;
+    }else {
+      const networkResponse = await fetch(event.request);
+      cache.put(event.request,networkResponse.clone());
       console.log("event request",event.request);
-      const cachedResponse = await cache.match(event.request);
-      if (cachedResponse) {
-        console.log("cachedResponse",cachedResponse)
-        return cachedResponse;
-      }else {
-        const networkResponse = await fetch(event.request);
-        cache.put(event.request,networkResponse.clone());
-        console.log("event request",event.request);
-        console.log("networkResponse",networkResponse)
-        return networkResponse;
-      }
-    }));
-  }else{
-    return ;
-  }
+      console.log("networkResponse",networkResponse)
+      return networkResponse;
+    }
+  }));
   
 
   
