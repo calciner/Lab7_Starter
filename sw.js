@@ -46,6 +46,7 @@ self.addEventListener('fetch', function (event) {
   //            network response.
   
   event.respondWith(caches.open(CACHE_NAME).then(async(cache)=>{
+    console.log("event request",event.request);
     const cachedResponse = await cache.match(event.request);
     if (cachedResponse) {
       console.log("cachedResponse",cachedResponse)
@@ -53,6 +54,7 @@ self.addEventListener('fetch', function (event) {
     }else {
       const networkResponse = await fetch(event.request);
       cache.put(event.request,networkResponse.clone());
+      console.log("event request",event.request);
       console.log("networkResponse",networkResponse)
       return networkResponse;
     }
