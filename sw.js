@@ -15,7 +15,7 @@ self.addEventListener('install', function (event) {
         'https://introweb.tech/assets/json/3_moms-cornbread-stuffing.json',
         'https://introweb.tech/assets/json/4_50-indulgent-thanksgiving-side-dishes-for-any-holiday-gathering.json',
         'https://introweb.tech/assets/json/5_healthy-thanksgiving-recipe-crockpot-turkey-breast.json',
-        'https://introweb.tech/assets/json/6_one-pot-thanksgiving-dinner.json',
+        'https://introweb.tech/assets/json/6_one-pot-thanksgiving-dinner.json'
       ]);
     })
   );
@@ -27,7 +27,7 @@ self.addEventListener('activate', function (event) {
 });
 
 // Intercept fetch requests and cache them
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', async function (event) {
   // We added some known URLs to the cache above, but tracking down every
   // subsequent network request URL and adding it manually would be very taxing.
   // We will be adding all of the resources not specified in the intiial cache
@@ -44,21 +44,25 @@ self.addEventListener('fetch', function (event) {
   // B8. TODO - If the request is in the cache, return with the cached version.
   //            Otherwise fetch the resource, add it to the cache, and return
   //            network response.
-  
-  event.respondWith(caches.open(CACHE_NAME).then(async(cache)=>{
-    console.log("event request",event.request);
-    const cachedResponse = await cache.match(event.request);
-    if (cachedResponse) {
-      console.log("cachedResponse",cachedResponse)
-      return cachedResponse;
-    }else {
-      const networkResponse = await fetch(event.request);
-      cache.put(event.request,networkResponse.clone());
+  if(event.request.destination === 'image'){
+    await event.respondWith(caches.open(CACHE_NAME).then(async(cache)=>{
       console.log("event request",event.request);
-      console.log("networkResponse",networkResponse)
-      return networkResponse;
-    }
-  }));
+      const cachedResponse = await cache.match(event.request);
+      if (cachedResponse) {
+        console.log("cachedResponse",cachedResponse)
+        return cachedResponse;
+      }else {
+        const networkResponse = await fetch(event.request.url);
+        cache.put(event.request,networkResponse.clone());
+        console.log("event request",event.request);
+        console.log("networkResponse",networkResponse)
+        return networkResponse;
+      }
+    }));
+  }else{
+    return ;
+  }
+  
 
   
 });
